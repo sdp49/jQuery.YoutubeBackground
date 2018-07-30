@@ -77,6 +77,7 @@ if (typeof Object.create !== "function") {
       playButtonClass: 'YTPlayer-play',
       pauseButtonClass: 'YTPlayer-pause',
       muteButtonClass: 'YTPlayer-mute',
+      unMuteButtonClass: 'YTPlayer-unmute',
       volumeUpClass: 'YTPlayer-volume-up',
       volumeDownClass: 'YTPlayer-volume-down',
       start: 0,
@@ -148,6 +149,27 @@ if (typeof Object.create !== "function") {
       // Listen for Resize Event
       self.$window.on('resize.YTplayer' + self.ID, function() {
         self.resize(self);
+      });
+      
+      $('.'+self.options.pauseButtonClass).click(function(){
+        self.player.pauseVideo();
+        $('.'+self.options.pauseButtonClass).hide()
+        $('.'+self.options.playButtonClass).show();
+      });
+      $('.'+self.options.playButtonClass).click(function(){
+        self.player.playVideo();
+        $('.'+self.options.playButtonClass).hide();
+        $('.'+self.options.pauseButtonClass).show();
+      });
+      $('.'+self.options.muteButtonClass).click(function(){
+        self.player.mute();
+        $('.'+self.options.muteButtonClass).hide();
+        $('.'+self.options.unMuteButtonClass).show();
+      });
+      $('.'+self.options.unMuteButtonClass).click(function(){
+        self.player.unMute();
+        $('.'+self.options.unMuteButtonClass).hide();
+        $('.'+self.options.muteButtonClass).show();
       });
 
       loadAPI(self.onYouTubeIframeAPIReady.bind(self));
@@ -267,7 +289,9 @@ if (typeof Object.create !== "function") {
       if (this.options.mute) {
         e.target.mute();
       }
-      e.target.playVideo();
+      if (this.options.playerVars.autoplay!=0) {
+        e.target.playVideo();
+      }
     },
 
     /**
